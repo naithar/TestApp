@@ -8,12 +8,6 @@ func main() {
     glfw.initialize()
     defer { glfw.terminate() }
     
-//    glfwWindowHint(GLFW_VISIBLE, 1)
-//    guard let window2 = glfw.Window(width: 800, height: 600) else {
-//        return
-//    }
-    
-//    glfwWindowHint(GLFW_VISIBLE, 1)
     guard let window1 = glfw.Window(width: 600, height: 600, title: "second") else {
         return
     }
@@ -22,10 +16,16 @@ func main() {
         print("sas")
     }
     
-    window1.makeCurrent()
+    window1.callbacks.closed = { window in
+        print("close")
+    }
+    
+    
     
 	while !window1.shouldClose {
         glfw.pollEvents()
+        
+        window1.makeCurrent()
         
         let size = window1.framebuffer.size
         gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
@@ -38,10 +38,15 @@ func main() {
         
         gl.begin(.triangles) {
             glColor3f(0.1, 0.2, 0.3);
-            glVertex3f(0, 0, 0);
-            glVertex3f(2, 0, 0);
-            glVertex3f(0, 2, 0);
+            var fi: [GLfloat] = [0, 0, 0]
+            glVertex3fv(&fi)
+            var se: [GLfloat] = [2, 0, 0]
+            glVertex3fv(&se)
+            var th: [GLfloat] = [0, 2, 0]
+            glVertex3fv(&th)
         }
+        
+//        http://www.glfw.org/docs/latest/window_guide.html#window_attribs
         
         window1.swapBuffers()
 	}
