@@ -1,11 +1,44 @@
+import SwiftOpenGL
+import GLKit
+
+func draw() {
+    gl.clear(color: gl.Color(red: 0.2, green: 0.4, blue: 0.3, alpha: 1))
+    gl.clear([.buffer, .depth])
+    
+    gl.matrixMode(.projection)
+    gl.loadIdentity()
+    
+    gl.ortho(left: -1, right: 10, bottom: 10, top: -1, near: 0, far: 1)
+    
+    gl.begin(.triangles) {
+//        glColor3f(0.1, 0.2, 0.3);
+//        var fi: [GLfloat] = [0, 0, 0]
+//        glVertex3fv(&fi)
+//        var se: [GLfloat] = [2, 0, 0]
+//        glVertex3fv(&se)
+//        var th: [GLfloat] = [0, 2, 0]
+//        glVertex3fv(&th)
+    }
+}
+
 #if os(iOS)
-import UIKit
+    import UIKit
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    class SwiftOpenGLViewController: UIViewController {
+    class SwiftOpenGLViewController: GLKViewController {
         
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            
+            (self.view as? GLKView)?.context = EAGLContext(api: .openGLES3) ?? EAGLContext(api: .openGLES2)
+            
+            self.preferredFramesPerSecond = 60
+        }
         
+        override func glkView(_ view: GLKView, drawIn rect: CGRect) {
+            draw()
+        }
     }
     
     public typealias Options = [UIApplicationLaunchOptionsKey : Any]
@@ -50,7 +83,6 @@ main()
     import GLFW
     
     import COpenGLOSX
-    import SwiftOpenGL
     
     func main() {
         glfw.initialize()
@@ -68,35 +100,21 @@ main()
             print("close")
         }
         
-        
+        //window.frame { window, frameData } // 
         while !window1.shouldClose {
             glfw.pollEvents()
             
-            window1.makeCurrent()
-            
-            let size = window1.framebuffer.size
-            gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
-            gl.clear(color: gl.Color(red: 0.2, green: 0.4, blue: 0.3, alpha: 1))
-            gl.clear([.buffer, .depth])
-            
-            gl.matrixMode(.projection)
-            gl.loadIdentity()
-            
-            gl.ortho(left: -1, right: 10, bottom: 10, top: -1, near: 0, far: 1)
-            
-            gl.begin(.triangles) {
-                glColor3f(0.1, 0.2, 0.3);
-                var fi: [GLfloat] = [0, 0, 0]
-                glVertex3fv(&fi)
-                var se: [GLfloat] = [2, 0, 0]
-                glVertex3fv(&se)
-                var th: [GLfloat] = [0, 2, 0]
-                glVertex3fv(&th)
+            do {
+                window1.makeCurrent()
+                
+                let size = window1.framebuffer.size
+                gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
+                draw()
+                
+                //        http://www.glfw.org/docs/latest/window_guide.html#window_attribs
+                
+                window1.swapBuffers()
             }
-            
-            //        http://www.glfw.org/docs/latest/window_guide.html#window_attribs
-            
-            window1.swapBuffers()
         }
     }
     
