@@ -1,17 +1,6 @@
+import COpenGLOSX
 import SwiftOpenGL
 
-let vertexShaderSource = "#version 330 core\n" +
-    "layout (location = 0) in vec3 position;\n" +
-    "void main()\n" +
-    "{\n" +
-    "gl_Position = vec4(position.x, position.y, position.z, 1.0);\n" +
-"}\n"
-let fragmentShaderSource = "#version 330 core\n" +
-    "out vec4 color;\n" +
-    "void main()\n" +
-    "{\n" +
-    "color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n" +
-"}\n"
 
 func draw() {
     gl.clear(color: gl.Color(red: 0.2, green: 0.6, blue: 0.3, alpha: 1))
@@ -46,14 +35,27 @@ func draw() {
         5,5
     ]
     
-    let col: [GLfloat] = [
+    
+    
+    var col: [GLfloat] = [
         0, 0, 0, 0,
         0.1, 0.2, 1, 1,
         1, 0.2, 0.3, 1,
         1, 0.2, 0.3, 1
     ]
     
+    var color = [GLdouble]()
+    
     gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
+    
+    gl.get(GLfloat.self, key: GLenum(GL_CURRENT_COLOR)) { color in
+        print(GLfloat(color[1]))
+    }
+    
+    gl.get(GLboolean.self, key: GLenum(GL_COLOR_WRITEMASK)) { blend in
+        print(blend)
+    }
+    
     
     glEnableClientState(GLenum(GL_VERTEX_ARRAY));
     glEnableClientState(GLenum(GL_COLOR_ARRAY));
@@ -363,6 +365,7 @@ main()
             
             do {
                 window2.makeCurrent()
+                
                 
                 let size = window1.framebuffer.size
                 gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
