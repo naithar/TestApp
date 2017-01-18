@@ -49,7 +49,7 @@ func draw() {
     gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
     
     gl.get(GLfloat.self, key: GLenum(GL_CURRENT_COLOR)) { color in
-        print(GLfloat(color[1]))
+        print(color)
     }
     
     gl.get(GLboolean.self, key: GLenum(GL_BLEND)) { blend in
