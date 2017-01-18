@@ -52,7 +52,7 @@ func draw() {
         print(GLfloat(color[1]))
     }
     
-    gl.get(GLboolean.self, key: GLenum(GL_COLOR_WRITEMASK)) { blend in
+    gl.get(GLboolean.self, key: GLenum(GL_BLEND)) { blend in
         print(blend)
     }
     
