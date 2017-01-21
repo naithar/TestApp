@@ -37,52 +37,61 @@ func draw() {
 //    }
     
     
+    gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
+    
+    gl.draw(.quads) {
+        gl.vertex(gl.Vertex(x: -1, y: -1))
+        gl.vertex(gl.Vertex(x: 1, y: -1))
+        gl.color(gl.Color(red: 0.1, green: 0.2, blue: 1))
+        gl.vertex(gl.Vertex(x: 1, y: 0.5))
+        gl.vertex(gl.Vertex(x: 0.5, y: 0.5))
+    }
 //    glBegin(GLenum(GL_FLOAT))
     
 //    print(glGetError())
     
-    let q3: [GLfloat] = [
-        -1,-1,
-        1,-1,
-        1,0.5,
-        0.5,0.5
-    ]
-    
-    
-    
-    var col: [GLfloat] = [
-        0, 0, 0, 0,
-        0.1, 0.2, 1, 1,
-        1, 0.2, 0.3, 1,
-        1, 0.2, 0.3, 1
-    ]
-    
-//    var color = [GLfloat]()
-    
-    gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
-    
-    gl.get(GLfloat.self, key: GLenum(GL_CURRENT_COLOR)) { color in
-        print(color)
-        col[0] = color[0]
-        col[1] = color[1]
-        col[2] = color[2]
-        col[3] = color[3]
-    }
-    
-    gl.get(GLboolean.self, key: GLenum(GL_BLEND)) { blend in
-        print(blend)
-    }
-    
-    
-    glEnableClientState(GLenum(GL_VERTEX_ARRAY));
-    glEnableClientState(GLenum(GL_COLOR_ARRAY));
-    
-    glVertexPointer(2, GLenum(GL_FLOAT), 0, q3);
-    glColorPointer(4, GLenum(GL_FLOAT), 0, col);
-    glDrawArrays(GLenum(GL_TRIANGLE_FAN),0,4);
-    
-    glDisableClientState(GLenum(GL_COLOR_ARRAY));
-    glDisableClientState(GLenum(GL_VERTEX_ARRAY));
+//    let q3: [GLfloat] = [
+//        -1,-1,
+//        1,-1,
+//        1,0.5,
+//        0.5,0.5
+//    ]
+//    
+//    
+//    
+//    var col: [GLfloat] = [
+//        0, 0, 0, 0,
+//        0.1, 0.2, 1, 1,
+//        1, 0.2, 0.3, 1,
+//        1, 0.2, 0.3, 1
+//    ]
+//    
+////    var color = [GLfloat]()
+//    
+//    gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
+//    
+//    gl.get(GLfloat.self, key: GLenum(GL_CURRENT_COLOR)) { color in
+//        print(color)
+//        col[0] = color[0]
+//        col[1] = color[1]
+//        col[2] = color[2]
+//        col[3] = color[3]
+//    }
+//    
+//    gl.get(GLboolean.self, key: GLenum(GL_BLEND)) { blend in
+//        print(blend)
+//    }
+//    
+//    
+//    glEnableClientState(GLenum(GL_VERTEX_ARRAY));
+//    glEnableClientState(GLenum(GL_COLOR_ARRAY));
+//    
+//    glVertexPointer(2, GLenum(GL_FLOAT), 0, q3);
+//    glColorPointer(4, GLenum(GL_FLOAT), 0, col);
+//    glDrawArrays(GLenum(GL_TRIANGLE_FAN),0,4);
+//    
+//    glDisableClientState(GLenum(GL_COLOR_ARRAY));
+//    glDisableClientState(GLenum(GL_VERTEX_ARRAY));
 
 //    glBegin(GL_QUADS);
 //    glVertex2f(-10,-10);
@@ -252,6 +261,10 @@ main()
         glfw.initialize()
         defer { glfw.terminate() }
         
+        glfw.set(windowHint: .clientAPI(.openGL))
+        glfw.set(windowHint: .versionMajor(3))
+        glfw.set(windowHint: .versionMinor(1))
+        
         guard let window1 = glfw.Window(width: 600, height: 600, title: "second") else {
             return
         }
@@ -268,40 +281,6 @@ main()
             print("close")
         }
         
-        let vertixes: [GLfloat] = [
-            0, 0, 0,
-            2, 0, 0,
-            0, 2, 0
-        ]
-        
-        var VAO:GLuint = 0
-        glGenVertexArraysAPPLE(1, &VAO)
-        
-        //    defer { glDeleteVertexArraysAPPLE(1, &VAO) }
-        var VBO:GLuint = 0
-        glGenBuffers(1, &VBO)
-        //    defer { glDeleteBuffers(1, &VBO) }
-        // Bind the Vertex Array Object first, then bind and set
-        // vertex buffer(s) and attribute pointer(s).
-        glBindVertexArrayAPPLE(VAO)
-        
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), VBO)
-        glBufferData(GLenum(GL_ARRAY_BUFFER),
-                     MemoryLayout<GLfloat>.stride * vertixes.count,
-                     vertixes, GLenum(GL_DYNAMIC_DRAW))
-        
-        glVertexAttribPointer(0, 3, GLenum(GL_FLOAT),
-                              GLboolean(GL_FALSE), GLsizei(MemoryLayout<GLfloat>.stride * 3), nil)
-        glEnableVertexAttribArray(0)
-        
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), 0) // Note that this is allowed,
-        // the call to glVertexAttribPointer registered VBO as the currently bound
-        // vertex buffer object so afterwards we can safely unbind.
-        glBindVertexArrayAPPLE(0)
-        
-        //window.frame { window, frameData } // 
-        
-//        RunLoop.current.add
         
         while !window1.shouldClose {
             glfw.pollEvents()
@@ -311,15 +290,12 @@ main()
                 
                 let size = window1.framebuffer.size
                 gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
-                draw()
+                gl.clear(color: gl.Color(red: 0.5, green: 0.5, blue: 0.5))
+                gl.clear([.color, .depth])
                 
-                gl.color(gl.Color(red: 0.1, green: 0.2, blue: 0.3, alpha: 1))
+                gl.matrixMode(.projection)
                 
-                glBindVertexArrayAPPLE(VAO)
-                glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)
-                glBindVertexArrayAPPLE(0)
-                
-                //        http://www.glfw.org/docs/latest/window_guide.html#window_attribs
+                let vertices = 
                 
                 window1.swapBuffers()
             }
@@ -328,10 +304,20 @@ main()
                 window2.makeCurrent()
                 
                 
-                let size = window1.framebuffer.size
+                let size = window2.framebuffer.size
                 gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
-                gl.clear(color: gl.Color(red: 0.5, green: 0.1, blue: 0.2, alpha: 1))
-                gl.clear([.color])
+                draw()
+//                gl.clear(color: gl.Color(red: 0.5, green: 0.1, blue: 0.2, alpha: 1))
+//                gl.clear([.color, .depth])
+//                
+//                gl.ortho(left: -1, right: 1, bottom: 1, top: -1, near: -1, far: 1)
+//                
+//                gl.color(gl.Color(red: 0.5, green: 0.5, blue: 0.5))
+//                gl.draw(.triangles) {
+//                    gl.vertex(gl.Vertex(x: 1, y: 1))
+//                    gl.vertex(gl.Vertex(x: 1, y: 0))
+//                    gl.vertex(gl.Vertex(x: 0, y: 0))
+//                }
                 
                 //        http://www.glfw.org/docs/latest/window_guide.html#window_attribs
                 
