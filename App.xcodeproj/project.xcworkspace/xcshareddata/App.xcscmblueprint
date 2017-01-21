@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "AA605B58C1107D848BE13F4E66923665D17F95B3",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "777E6FD2F005FD4AAAB7057902AFFC38C9936FFD" : 9223372036854775807,
+    "AA605B58C1107D848BE13F4E66923665D17F95B3" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "F74BCD7C-C0B4-40F6-A17B-763497B8E099",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "777E6FD2F005FD4AAAB7057902AFFC38C9936FFD" : "TestApp\/Packages\/SwiftOpenGL-0.0.3\/",
+    "AA605B58C1107D848BE13F4E66923665D17F95B3" : "TestApp\/Packages\/GLFW-0.0.2\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "App",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "App.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/naithar\/OpenGL.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "777E6FD2F005FD4AAAB7057902AFFC38C9936FFD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/naithar\/TestApp.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AA605B58C1107D848BE13F4E66923665D17F95B3"
+    }
+  ]
+}

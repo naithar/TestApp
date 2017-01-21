@@ -1,6 +1,19 @@
 //import COpenGLOSX
 import SwiftOpenGL
-
+//import CGLFW
+//import SGLFW
+//import COpenGL
+//import SGL
+//import SGLRender
+//import SGLEngine
+//import SGLImage
+//import SGLAudio
+//import SGLUI
+//
+//sgl
+//sglRender
+//sglEngine
+//sglCore
 
 func draw() {
     gl.clear(color: gl.Color(red: 0.2, green: 0.6, blue: 0.3, alpha: 1))
@@ -46,15 +59,19 @@ func draw() {
     
 //    var color = [GLfloat]()
     
-//    gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
+    gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
     
-//    gl.get(GLfloat.self, key: GLenum(GL_CURRENT_COLOR)) { color in
-//        print(color)
-//    }
-//    
-//    gl.get(GLboolean.self, key: GLenum(GL_BLEND)) { blend in
-//        print(blend)
-//    }
+    gl.get(GLfloat.self, key: GLenum(GL_CURRENT_COLOR)) { color in
+        print(color)
+        col[0] = color[0]
+        col[1] = color[1]
+        col[2] = color[2]
+        col[3] = color[3]
+    }
+    
+    gl.get(GLboolean.self, key: GLenum(GL_BLEND)) { blend in
+        print(blend)
+    }
     
     
     glEnableClientState(GLenum(GL_VERTEX_ARRAY));
@@ -163,14 +180,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         override func glkView(_ view: GLKView, drawIn rect: CGRect) {
-            
-            EAGLContext.setCurrent((self.view as? GLKView)!.context)
-            
             glViewport (0, 0, GLsizei(view.frame.width * 2), GLsizei(view.frame.height * 2));
             
             draw()
-            
-            (self.view as? GLKView)?.context.presentRenderbuffer(Int(GL_RENDERBUFFER))
         }
     }
     
@@ -201,6 +213,19 @@ func main() {
 main()
 
 /*
+     
+     //Application
+     //.mainWindow: Window?
+     //.windows: [Window]
+     //.add(window: _)
+     //.run()
+     
+     //Window
+     //.input callbacks
+     //callbacks
+     
+     //Notifications
+     
      MainLoop
      Application - MainWindow. (display) - Context (makeCurrent)
      Window. (display) - Context (makeCurrent)
