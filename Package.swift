@@ -1,6 +1,6 @@
 import PackageDescription
 
-var dependencies = [Package.Dependency]()
+var dependencies: [Package.Dependency] = []
 
 #if os(Linux) || os(macOS)
 dependencies.append(.Package(url: "https://github.com/naithar/GLFW.git", majorVersion: 0))

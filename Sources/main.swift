@@ -1,4 +1,4 @@
-import COpenGLOSX
+//import COpenGLOSX
 import SwiftOpenGL
 
 
@@ -9,7 +9,7 @@ func draw() {
     gl.matrixMode(.projection)
     gl.loadIdentity()
     
-    gl.ortho(left: -10, right: 10, bottom: 10, top: -10, near: 0, far: 1)
+//    gl.ortho(left: -10, right: 10, bottom: 10, top: -10, near: 0, far: 1)
 
 //    gl.color(gl.Color(red: 0.1, green: 1, blue: 1, alpha: 1))
     
@@ -29,10 +29,10 @@ func draw() {
 //    print(glGetError())
     
     let q3: [GLfloat] = [
-        -10,-10,
-        10,-10,
-        10,5,
-        5,5
+        -1,-1,
+        1,-1,
+        1,0.5,
+        0.5,0.5
     ]
     
     
@@ -44,17 +44,17 @@ func draw() {
         1, 0.2, 0.3, 1
     ]
     
-    var color = [GLdouble]()
+//    var color = [GLfloat]()
     
-    gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
+//    gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
     
-    gl.get(GLfloat.self, key: GLenum(GL_CURRENT_COLOR)) { color in
-        print(color)
-    }
-    
-    gl.get(GLboolean.self, key: GLenum(GL_BLEND)) { blend in
-        print(blend)
-    }
+//    gl.get(GLfloat.self, key: GLenum(GL_CURRENT_COLOR)) { color in
+//        print(color)
+//    }
+//    
+//    gl.get(GLboolean.self, key: GLenum(GL_BLEND)) { blend in
+//        print(blend)
+//    }
     
     
     glEnableClientState(GLenum(GL_VERTEX_ARRAY));
@@ -154,87 +154,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     class SwiftOpenGLViewController: GLKViewController {
         
-        
-        var vbo: GLuint = 0
-        var vao: GLuint = 0
         override func viewDidLoad() {
             super.viewDidLoad()
             
-            (self.view as? GLKView)?.context = EAGLContext(api: .openGLES3) ?? EAGLContext(api: .openGLES2)
+            (self.view as? GLKView)?.context = EAGLContext(api: .openGLES1)// ?? EAGLContext(api: .openGLES2)
             
             self.preferredFramesPerSecond = 60
-            
-            let vertixes: [GLfloat] = [
-                0, 0, 0,
-                2, 0, 0,
-                0, 2, 0
-            ]
-            
-            glEnableClientState(GLenum(GL_VERTEX_ARRAY));
-//            
-//            "ss".withCString { (string: UnsafePointer<Int8>) in
-//                glShaderSource(1, 1, [string], [GLint(2)])
-//            }
-        
-//            var vbo: GLuint = 0
-            glGenBuffers(1, &vbo)
-            glBindBuffer(GLenum(GL_ARRAY_BUFFER), vbo)
-            glBufferData(
-                GLenum(GL_ARRAY_BUFFER), MemoryLayout<[GLfloat]>.stride * vertixes.count,
-                vertixes, GLenum(GL_STATIC_DRAW)
-            )
-            
-//            var vao: GLuint = 0
-            glGenVertexArrays(1, &vao);
-            glBindVertexArray(vao);
-            glBindBuffer(GLenum(GL_ARRAY_BUFFER), vbo);
-            
-            glVertexAttribPointer(0, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, nil);
-            
-            glBindBuffer(GLenum(GL_ARRAY_BUFFER), 0); // unbind VBO
-            glBindVertexArray(0); // unbind VAO
         }
         
         override func glkView(_ view: GLKView, drawIn rect: CGRect) {
-            glViewport (0, 0, GLsizei(view.frame.width), GLsizei(view.frame.height));
-//            glMatrixMode (GLenum(GL_PROJECTION));
-//            glLoadIdentity ();
-            gl.ortho(left: -1, right: 1, bottom: 1, top: -1, near: -1, far: 1)
-//            glMatrixMode (GLenum(GL_MODELVIEW));
-            glFrontFace(GLenum(GL_CCW))
             
-            glPushMatrix();
+            EAGLContext.setCurrent((self.view as? GLKView)!.context)
             
+            glViewport (0, 0, GLsizei(view.frame.width * 2), GLsizei(view.frame.height * 2));
             
-            glEnableClientState (GLenum(GL_VERTEX_ARRAY));
-            let triVertices: [GLfloat] = [
-                0.0, 1.0, 0.0,
-                -1.0, -1.0, 0.0,
-                1.0, -1.0, 0.0
-            ]
+            draw()
             
-            glVertexPointer(3, GLenum(GL_FLOAT), 0, triVertices);
-            
-            
-            glClearColor (0.2, 0.3, 0.3, 0.0);
-            glShadeModel (GLenum(GL_FLAT));
-            glClear (GLbitfield(GL_COLOR_BUFFER_BIT));
-            glColor4f (0.0, 0.0, 1.0, 1.0);
-            glLoadIdentity ();
-            
-            
-//            glTranslatef(0, 0, -20);
-            
-            
-//            glUniformMatrix2fv(<#T##location: GLint##GLint#>, <#T##count: GLsizei##GLsizei#>, <#T##transpose: GLboolean##GLboolean#>, <#T##value: UnsafePointer<GLfloat>!##UnsafePointer<GLfloat>!#>)
-//            glDrawArrays(GLenum(GL_TRIANGLES), 0, 3);
-//            glDisableClientState(GLenum(GL_VERTEX_ARRAY));
-//            glFlush ();
-            
-//            glBindVertexArray(self.vao);
-//            glEnableVertexAttribArray(0);
-//            glDrawArrays(GLenum(GL_TRIANGLES), 0, 3);
-//            glDisableVertexAttribArray(0);
+            (self.view as? GLKView)?.context.presentRenderbuffer(Int(GL_RENDERBUFFER))
         }
     }
     
