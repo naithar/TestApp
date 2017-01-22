@@ -2,7 +2,7 @@
 import CGLFW
 import GLFW
 
-//import COpenGLOSX
+import COpenGLOSX
 import SwiftOpenGL
 
 
@@ -426,7 +426,6 @@ main()
     class Main {
         
         
-        
         func main() {
             glfw.initialize()
             defer { glfw.terminate() }
@@ -434,10 +433,10 @@ main()
             
             
             glfw.set(windowHint: .samples(4))
-            glfw.set(windowHint: .contextVersionMajor(3))
-            glfw.set(windowHint: .contextVersionMinor(3))
-            glfw.set(windowHint: .openGLForwardCompat(true))
-            glfw.set(windowHint: .openGLProfile(.core))
+            glfw.set(windowHint: .contextVersionMajor(2))
+            glfw.set(windowHint: .contextVersionMinor(1))
+//            glfw.set(windowHint: .openGLForwardCompat(true))
+//            glfw.set(windowHint: .openGLProfile(.core))
             
             guard let window1 = glfw.Window(width: 600, height: 600, title: "second") else {
                 return
