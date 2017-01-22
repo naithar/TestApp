@@ -1,6 +1,11 @@
 //import COpenGLOSX
+import CGLFW
+import GLFW
+
+import COpenGLOSX
 import SwiftOpenGL
-//import CGLFW
+
+
 //import SGLFW
 //import COpenGL
 //import SGL
@@ -251,79 +256,183 @@ main()
      Window -
 */
 #else
-    import CGLFW
-    import GLFW
+//    import CGLFW
+//    import GLFW
     
-    import COpenGLOSX
+//    import COpenGLOSX
     
     class Main {
-    func main() {
-        glfw.initialize()
-        defer { glfw.terminate() }
         
-        glfw.set(windowHint: .clientAPI(.openGL))
-        glfw.set(windowHint: .versionMajor(3))
-        glfw.set(windowHint: .versionMinor(1))
-        
-        guard let window1 = glfw.Window(width: 600, height: 600, title: "second") else {
-            return
-        }
-        
-        guard let window2 = glfw.Window(width: 300, height: 300, title: "first") else {
-            return
-        }
-        
-        window1.callbacks.closed = { window in
-            print("sas")
-        }
-        
-        window1.callbacks.closed = { window in
-            print("close")
-        }
-        
-        
-        while !window1.shouldClose {
-            glfw.pollEvents()
+        func loadShaders() -> GLuint {
+            let vertexShaderID: GLuint = glCreateShader(GLenum(GL_VERTEX_SHADER))
+            let fragmentShaderID: GLuint = glCreateShader(GLenum(GL_FRAGMENT_SHADER))
             
-            do {
-                window1.makeCurrent()
-                
-                let size = window1.framebuffer.size
-                gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
-                gl.clear(color: gl.Color(red: 0.5, green: 0.5, blue: 0.5))
-                gl.clear([.color, .depth])
-                
-                gl.matrixMode(.projection)
-                
-                let vertices = 
-                
-                window1.swapBuffers()
+            let vertexShaderCode = //"#version 120\n" +
+                "attribute vec3 vertexPosition_modelspace;\n" +
+                "void main(){\n" +
+                "gl_Position = vec4(vertexPosition_modelspace, 1.0);\n" +
+            "}"
+            
+            let fragmentShaderCode = //"#version 120\n" +
+                "void main(){\n" +
+                "gl_FragColor = vec4(1,0,0,1);\n" +
+            "}"
+            
+            var result = GL_FALSE
+            var logLength: GLint = 0
+            
+            vertexShaderCode.withCString { code in
+                glShaderSource(vertexShaderID, 1, [code], nil)
+            }
+            glCompileShader(vertexShaderID)
+            
+            glGetShaderiv(vertexShaderID, GLenum(GL_COMPILE_STATUS), &result)
+            glGetShaderiv(vertexShaderID, GLenum(GL_INFO_LOG_LENGTH), &logLength)
+            
+            print("vertex res = \(result)")
+            if (logLength > 0) {
+                print("vertex compiler info exists")
+                var errorMessage: [Int8] = []
+                glGetShaderInfoLog(vertexShaderID, logLength, nil, &errorMessage)
+                print(String.init(validatingUTF8: errorMessage))
             }
             
-            do {
-                window2.makeCurrent()
+            fragmentShaderCode.withCString { code in
+                glShaderSource(fragmentShaderID, 1, [code], nil)
+            }
+            glCompileShader(fragmentShaderID)
+            
+            glGetShaderiv(fragmentShaderID, GLenum(GL_COMPILE_STATUS), &result)
+            glGetShaderiv(fragmentShaderID, GLenum(GL_INFO_LOG_LENGTH), &logLength)
+            
+            print("fragment res = \(result)")
+            if (logLength > 0) {
+                print("fragment compiler info exists")
+            }
+            
+            let programID: GLuint = glCreateProgram()
+            glAttachShader(programID, vertexShaderID)
+            glAttachShader(programID, fragmentShaderID)
+            glLinkProgram(programID)
+            
+            glGetProgramiv(programID, GLenum(GL_LINK_STATUS), &result)
+            glGetShaderiv(programID, GLenum(GL_INFO_LOG_LENGTH), &logLength)
+            
+            print("shader res = \(result)")
+            if (logLength > 0) {
+                print("shader info exists")
+            }
+            
+            glDeleteShader(vertexShaderID)
+            glDeleteShader(fragmentShaderID)
+            
+            return programID
+        }
+        
+        func main() {
+            glfw.initialize()
+            defer { glfw.terminate() }
+            
+            
+            
+            glfw.set(windowHint: .samples(4))
+            glfw.set(windowHint: .versionMajor(2))
+            glfw.set(windowHint: .versionMinor(1))
+//            glfw.set(windowHint: .openGLForwardCompat(true))
+//            glfw.set(windowHint: .openGLProfile(.core))
+            
+            guard let window1 = glfw.Window(width: 600, height: 600, title: "second") else {
+                return
+            }
+            
+//            guard let window2 = glfw.Window(width: 300, height: 300, title: "first") else {
+//                return
+//            }
+            
+            window1.callbacks.closed = { window in
+                print("sas")
+            }
+            
+            window1.callbacks.closed = { window in
+                print("close")
+            }
+            
+            
+            window1.makeCurrent()
+            print(String(cString: glGetString( GLenum(GL_VERSION) )))
+            
+            let vertices: [GLfloat] = [
+                -1, -1, -1,
+                1, -1, 0,
+                0, 1, 0
+            ]
+            
+            
+            let programID = self.loadShaders()
+            
+            
+            while !window1.shouldClose {
+                glfw.pollEvents()
                 
+                do {
+                    window1.makeCurrent()
+                    
+//
+                    let size = window1.framebuffer.size
+                    gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
+                    gl.clear(color: gl.Color(red: 0.5, green: 0.5, blue: 0.5))
+                    gl.clear([.color, .depth])
+                    
+                    gl.matrixMode(.projection)
+                    
+                    glUseProgram(programID)
+                    
+                    var vertexBuffer: GLuint = 0
+                    glGenBuffers(1, &vertexBuffer)
+                    glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
+                    glBufferData(GLenum(GL_ARRAY_BUFFER), 9 * MemoryLayout<GLfloat>.stride, vertices, GLenum(GL_STATIC_DRAW))
+                    
+                    
+                    var vertexArray: GLuint = 0
+                    glGenVertexArraysAPPLE(1, &vertexArray)
+                    glBindVertexArrayAPPLE(vertexArray)
+                    
+                    glEnableVertexAttribArray(0)
+                    glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
+                    glVertexAttribPointer(0, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, nil)
+                    
+                    glBindVertexArrayAPPLE(vertexArray)
+                    glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)
+                    
+                    glDisableVertexAttribArray(0)
+                    
+                    window1.swapBuffers()
+                }
                 
-                let size = window2.framebuffer.size
-                gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
-                draw()
-//                gl.clear(color: gl.Color(red: 0.5, green: 0.1, blue: 0.2, alpha: 1))
-//                gl.clear([.color, .depth])
-//                
-//                gl.ortho(left: -1, right: 1, bottom: 1, top: -1, near: -1, far: 1)
-//                
-//                gl.color(gl.Color(red: 0.5, green: 0.5, blue: 0.5))
-//                gl.draw(.triangles) {
-//                    gl.vertex(gl.Vertex(x: 1, y: 1))
-//                    gl.vertex(gl.Vertex(x: 1, y: 0))
-//                    gl.vertex(gl.Vertex(x: 0, y: 0))
+//                do {
+//                    window2.makeCurrent()
+//                    
+//                    
+//                    let size = window2.framebuffer.size
+//                    gl.viewport(x: 0, y: 0, width: size.width, height: size.height)
+//                    draw()
+//                    //                gl.clear(color: gl.Color(red: 0.5, green: 0.1, blue: 0.2, alpha: 1))
+//                    //                gl.clear([.color, .depth])
+//                    //
+//                    //                gl.ortho(left: -1, right: 1, bottom: 1, top: -1, near: -1, far: 1)
+//                    //
+//                    //                gl.color(gl.Color(red: 0.5, green: 0.5, blue: 0.5))
+//                    //                gl.draw(.triangles) {
+//                    //                    gl.vertex(gl.Vertex(x: 1, y: 1))
+//                    //                    gl.vertex(gl.Vertex(x: 1, y: 0))
+//                    //                    gl.vertex(gl.Vertex(x: 0, y: 0))
+//                    //                }
+//                    
+//                    //        http://www.glfw.org/docs/latest/window_guide.html#window_attribs
+//                    
+//                    window2.swapBuffers()
 //                }
-                
-                //        http://www.glfw.org/docs/latest/window_guide.html#window_attribs
-                
-                window2.swapBuffers()
             }
-        }
         }
     }
     
