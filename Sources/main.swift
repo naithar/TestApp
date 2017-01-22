@@ -25,6 +25,24 @@ func loadShaders() -> GLuint {
     let fragmentShaderID: GLuint = glCreateShader(GLenum(GL_FRAGMENT_SHADER))
     
     
+//    let vertexShaderCode = "" +
+//        "#version 330 core\n" +
+//        "layout (location = 0) in vec3 position;\n" +
+//        "void main()\n" +
+//        "{\n" +
+//        "gl_Position = vec4(position.x, position.y, position.z, 1.0);\n" +
+//    "}\0";
+//    
+//    let fragmentShaderCode = "" +
+//        "#version 330 core\n" +
+//        "out vec4 color;\n" +
+//        "void main()\n" +
+//        "{\n" +
+//        "color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n" +
+//    "}\n\0"
+    
+    
+    //ios
     let vertexShaderCode = "" +
         //        "#version 330 core\n" +
         "attribute vec4 vPosition;  \n" +
@@ -34,23 +52,24 @@ func loadShaders() -> GLuint {
     "}                         \n";
     
     let fragmentShaderCode = "" +
-//        "#version 330 core\n" +
+    //        "#version 330 core\n" +
     "precision mediump float;                   \n" +
     "void main()                                \n" +
     "{                                          \n" +
     "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); \n" +
-    "}                                          \n";
+    "}"
     
-//    let vertexShaderCode = //"#version 120 core\n" +
-//        "attribute vec3 vertexPosition_modelspace;\n" +
-//            "void main(){\n" +
-//            "gl_Position = vec4(vertexPosition_modelspace, 1.0);\n" +
-//    "}\0"
-//    
-//    let fragmentShaderCode = //"#version 120 core\n" +
-//        "void main(){\n" +
-//            "gl_FragColor = vec4(1,0,0,1);\n" +
-//    "}\0"
+    //open gl 2
+    //            let vertexShaderCode = //"#version 120 core\n" +
+    //                "attribute vec3 vertexPosition_modelspace;\n" +
+    //                "void main(){\n" +
+    //                "gl_Position = vec4(vertexPosition_modelspace, 1.0);\n" +
+    //            "}"
+    //
+    //            let fragmentShaderCode = //"#version 120 core\n" +
+    //                "void main(){\n" +
+    //                "gl_FragColor = vec4(1,0,0,1);\n" +
+    //            "}"
     
     var result = GL_FALSE
     var logLength: GLint = 0
@@ -101,41 +120,6 @@ func loadShaders() -> GLuint {
     glDeleteShader(fragmentShaderID)
     
     return programID
-}
-
-func drawShaders1(programID: GLuint) {
-    let vertices: [GLfloat] = [
-        -1, -1, -1,
-        1, -1, 0,
-        0, 1, 0
-    ]
-
-    
-    var vertexArray: GLuint = 0
-    glGenVertexArrays(1, &vertexArray)
-    defer { glDeleteVertexArrays(1, &vertexArray) }
-    glBindVertexArray(vertexArray)
-    
-    var vertexBuffer: GLuint = 0
-    glGenBuffers(1, &vertexBuffer)
-    defer { glDeleteBuffers(1, &vertexBuffer) }
-    glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-    glBufferData(GLenum(GL_ARRAY_BUFFER), 9 * MemoryLayout<GLfloat>.stride, vertices, GLenum(GL_STATIC_DRAW))
-    
-    gl.matrixMode(.projection)
-    
-    glUseProgram(programID)
-    
-    do {
-        glVertexAttribPointer(0, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, nil)
-        glEnableVertexAttribArray(0)
-        
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-        
-        glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)
-        
-        glDisableVertexAttribArray(0)
-    }
 }
 
 func drawShaders(programID: GLuint) {
@@ -365,19 +349,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         override func viewDidLoad() {
             super.viewDidLoad()
             
-            (self.view as? GLKView)?.context = EAGLContext(api: .openGLES3) ?? EAGLContext(api: .openGLES2)
+            (self.view as? GLKView)?.context = EAGLContext(api: .openGLES2)
             
             self.preferredFramesPerSecond = 60
-            
-            
         }
         
         override func glkView(_ view: GLKView, drawIn rect: CGRect) {
             glViewport (0, 0, GLsizei(view.frame.width * 2), GLsizei(view.frame.height * 2));
            
-            
-//            guard let programID = self.programID else { return }
-            drawShaders(programID: programID)
+            drawShaders(programID: self.programID)
 //            draw()
         }
     }
