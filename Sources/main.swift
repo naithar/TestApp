@@ -267,31 +267,16 @@ main()
             let vertexShaderID: GLuint = glCreateShader(GLenum(GL_VERTEX_SHADER))
             let fragmentShaderID: GLuint = glCreateShader(GLenum(GL_FRAGMENT_SHADER))
             
-            
-            let vertexShaderCode = "" +
-                "#version 330 core\n" +
-                "layout (location = 0) in vec4 position;\n" +
-                "void main() {\n" +
-                "gl_Position = vec4(position.x, position.y, position.z, position.w);" +
+            let vertexShaderCode = //"#version 120\n" +
+                "attribute vec3 vertexPosition_modelspace;\n" +
+                "void main(){\n" +
+                "gl_Position = vec4(vertexPosition_modelspace, 1.0);\n" +
             "}"
             
-            let fragmentShaderCode = "" +
-                "#version 330 core\n" +
-                "out vec4 color;\n" +
-                "void main() {\n" +
-                "color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n" +
+            let fragmentShaderCode = //"#version 120\n" +
+                "void main(){\n" +
+                "gl_FragColor = vec4(1,0,0,1);\n" +
             "}"
-            
-//            let vertexShaderCode = //"#version 120 core\n" +
-//                "attribute vec3 vertexPosition_modelspace;\n" +
-//                "void main(){\n" +
-//                "gl_Position = vec4(vertexPosition_modelspace, 1.0);\n" +
-//            "}"
-//            
-//            let fragmentShaderCode = //"#version 120 core\n" +
-//                "void main(){\n" +
-//                "gl_FragColor = vec4(1,0,0,1);\n" +
-//            "}"
             
             var result = GL_FALSE
             var logLength: GLint = 0
@@ -351,10 +336,10 @@ main()
             
             
             glfw.set(windowHint: .samples(4))
-            glfw.set(windowHint: .contextVersionMajor(3))
-            glfw.set(windowHint: .contextVersionMinor(3))
-            glfw.set(windowHint: .openGLForwardCompat(true))
-            glfw.set(windowHint: .openGLProfile(.core))
+            glfw.set(windowHint: .contextVersionMajor(2))
+            glfw.set(windowHint: .contextVersionMinor(1))
+//            glfw.set(windowHint: .openGLForwardCompat(true))
+//            glfw.set(windowHint: .openGLProfile(.core))
             
             guard let window1 = glfw.Window(width: 600, height: 600, title: "second") else {
                 return
