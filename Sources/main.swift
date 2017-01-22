@@ -345,6 +345,8 @@ main()
                 return
             }
             
+            
+            
 //            guard let window2 = glfw.Window(width: 300, height: 300, title: "first") else {
 //                return
 //            }
@@ -359,6 +361,12 @@ main()
             
             
             window1.makeCurrent()
+            
+//            while !window1.shouldClose {
+//                window1.swapBuffers()
+//                glfw.pollEvents()
+//            }
+            print(String(cString: glfwGetVersionString()))
             print(String(cString: glGetString( GLenum(GL_VERSION) )))
             
             let vertices: [GLfloat] = [
@@ -366,6 +374,22 @@ main()
                 1, -1, 0,
                 0, 1, 0
             ]
+            
+            var vertexBuffer: GLuint = 0
+            glGenBuffers(1, &vertexBuffer)
+            glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
+            glBufferData(GLenum(GL_ARRAY_BUFFER), 9 * MemoryLayout<GLfloat>.stride, vertices, GLenum(GL_STATIC_DRAW))
+            
+            
+            var vertexArray: GLuint = 0
+            glGenVertexArraysAPPLE(1, &vertexArray)
+            glBindVertexArrayAPPLE(vertexArray)
+            
+            glEnableVertexAttribArray(0)
+            glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
+            glVertexAttribPointer(0, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, nil)
+            //
+            glBindVertexArrayAPPLE(vertexArray)
             
             
             let programID = self.loadShaders()
@@ -387,20 +411,7 @@ main()
                     
                     glUseProgram(programID)
                     
-                    var vertexBuffer: GLuint = 0
-                    glGenBuffers(1, &vertexBuffer)
-                    glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-                    glBufferData(GLenum(GL_ARRAY_BUFFER), 9 * MemoryLayout<GLfloat>.stride, vertices, GLenum(GL_STATIC_DRAW))
-                    
-                    
-                    var vertexArray: GLuint = 0
-                    glGenVertexArraysAPPLE(1, &vertexArray)
-                    glBindVertexArrayAPPLE(vertexArray)
-                    
                     glEnableVertexAttribArray(0)
-                    glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-                    glVertexAttribPointer(0, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, nil)
-                    
                     glBindVertexArrayAPPLE(vertexArray)
                     glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)
                     
