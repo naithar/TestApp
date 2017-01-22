@@ -264,69 +264,69 @@ main()
     class Main {
         
         func loadShaders() -> GLuint {
-            let vertexShaderID: GLuint = glCreateShader(GLenum(GL_VERTEX_SHADER))
-            let fragmentShaderID: GLuint = glCreateShader(GLenum(GL_FRAGMENT_SHADER))
+//            let vertexShaderID: GLuint = glCreateShader(GLenum(GL_VERTEX_SHADER))
+//            let fragmentShaderID: GLuint = glCreateShader(GLenum(GL_FRAGMENT_SHADER))
+//            
+//            let vertexShaderCode = //"#version 120\n" +
+//                "attribute vec3 vertexPosition_modelspace;\n" +
+//                "void main(){\n" +
+//                "gl_Position = vec4(vertexPosition_modelspace, 1.0);\n" +
+//            "}"
+//            
+//            let fragmentShaderCode = //"#version 120\n" +
+//                "void main(){\n" +
+//                "gl_FragColor = vec4(1,0,0,1);\n" +
+//            "}"
+//            
+//            var result = GL_FALSE
+//            var logLength: GLint = 0
+//            
+//            vertexShaderCode.withCString { code in
+//                glShaderSource(vertexShaderID, 1, [code], nil)
+//            }
+//            glCompileShader(vertexShaderID)
+//            
+//            glGetShaderiv(vertexShaderID, GLenum(GL_COMPILE_STATUS), &result)
+//            glGetShaderiv(vertexShaderID, GLenum(GL_INFO_LOG_LENGTH), &logLength)
+//            
+//            print("vertex res = \(result)")
+//            if (logLength > 0) {
+//                print("vertex compiler info exists")
+//                var errorMessage: [Int8] = []
+//                glGetShaderInfoLog(vertexShaderID, logLength, nil, &errorMessage)
+//                print(String.init(validatingUTF8: errorMessage))
+//            }
+//            
+//            fragmentShaderCode.withCString { code in
+//                glShaderSource(fragmentShaderID, 1, [code], nil)
+//            }
+//            glCompileShader(fragmentShaderID)
+//            
+//            glGetShaderiv(fragmentShaderID, GLenum(GL_COMPILE_STATUS), &result)
+//            glGetShaderiv(fragmentShaderID, GLenum(GL_INFO_LOG_LENGTH), &logLength)
+//            
+//            print("fragment res = \(result)")
+//            if (logLength > 0) {
+//                print("fragment compiler info exists")
+//            }
+//            
+//            let programID: GLuint = glCreateProgram()
+//            glAttachShader(programID, vertexShaderID)
+//            glAttachShader(programID, fragmentShaderID)
+//            glLinkProgram(programID)
+//            
+//            glGetProgramiv(programID, GLenum(GL_LINK_STATUS), &result)
+//            glGetShaderiv(programID, GLenum(GL_INFO_LOG_LENGTH), &logLength)
+//            
+//            print("shader res = \(result)")
+//            if (logLength > 0) {
+//                print("shader info exists")
+//            }
+//            
+//            glDeleteShader(vertexShaderID)
+//            glDeleteShader(fragmentShaderID)
             
-            let vertexShaderCode = //"#version 120\n" +
-                "attribute vec3 vertexPosition_modelspace;\n" +
-                "void main(){\n" +
-                "gl_Position = vec4(vertexPosition_modelspace, 1.0);\n" +
-            "}"
-            
-            let fragmentShaderCode = //"#version 120\n" +
-                "void main(){\n" +
-                "gl_FragColor = vec4(1,0,0,1);\n" +
-            "}"
-            
-            var result = GL_FALSE
-            var logLength: GLint = 0
-            
-            vertexShaderCode.withCString { code in
-                glShaderSource(vertexShaderID, 1, [code], nil)
-            }
-            glCompileShader(vertexShaderID)
-            
-            glGetShaderiv(vertexShaderID, GLenum(GL_COMPILE_STATUS), &result)
-            glGetShaderiv(vertexShaderID, GLenum(GL_INFO_LOG_LENGTH), &logLength)
-            
-            print("vertex res = \(result)")
-            if (logLength > 0) {
-                print("vertex compiler info exists")
-                var errorMessage: [Int8] = []
-                glGetShaderInfoLog(vertexShaderID, logLength, nil, &errorMessage)
-                print(String.init(validatingUTF8: errorMessage))
-            }
-            
-            fragmentShaderCode.withCString { code in
-                glShaderSource(fragmentShaderID, 1, [code], nil)
-            }
-            glCompileShader(fragmentShaderID)
-            
-            glGetShaderiv(fragmentShaderID, GLenum(GL_COMPILE_STATUS), &result)
-            glGetShaderiv(fragmentShaderID, GLenum(GL_INFO_LOG_LENGTH), &logLength)
-            
-            print("fragment res = \(result)")
-            if (logLength > 0) {
-                print("fragment compiler info exists")
-            }
-            
-            let programID: GLuint = glCreateProgram()
-            glAttachShader(programID, vertexShaderID)
-            glAttachShader(programID, fragmentShaderID)
-            glLinkProgram(programID)
-            
-            glGetProgramiv(programID, GLenum(GL_LINK_STATUS), &result)
-            glGetShaderiv(programID, GLenum(GL_INFO_LOG_LENGTH), &logLength)
-            
-            print("shader res = \(result)")
-            if (logLength > 0) {
-                print("shader info exists")
-            }
-            
-            glDeleteShader(vertexShaderID)
-            glDeleteShader(fragmentShaderID)
-            
-            return programID
+            return 0//programID
         }
         
         func main() {
@@ -366,30 +366,14 @@ main()
 //                window1.swapBuffers()
 //                glfw.pollEvents()
 //            }
-            print(String(cString: glfwGetVersionString()))
-            print(String(cString: glGetString( GLenum(GL_VERSION) )))
+//            print(String(cString: glfwGetVersionString()))
+//            print(String(cString: glGetString( GLenum(GL_VERSION) )))
             
             let vertices: [GLfloat] = [
                 -1, -1, -1,
                 1, -1, 0,
                 0, 1, 0
             ]
-            
-            var vertexBuffer: GLuint = 0
-            glGenBuffers(1, &vertexBuffer)
-            glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-            glBufferData(GLenum(GL_ARRAY_BUFFER), 9 * MemoryLayout<GLfloat>.stride, vertices, GLenum(GL_STATIC_DRAW))
-            
-            
-            var vertexArray: GLuint = 0
-            glGenVertexArraysAPPLE(1, &vertexArray)
-            glBindVertexArrayAPPLE(vertexArray)
-            
-            glEnableVertexAttribArray(0)
-            glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-            glVertexAttribPointer(0, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, nil)
-            //
-            glBindVertexArrayAPPLE(vertexArray)
             
             
             let programID = self.loadShaders()
@@ -411,11 +395,30 @@ main()
                     
                     glUseProgram(programID)
                     
+                    var vertexBuffer: GLuint = 0
+                    glGenBuffers(1, &vertexBuffer)
+                    glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
+                    glBufferData(GLenum(GL_ARRAY_BUFFER), 9 * MemoryLayout<GLfloat>.stride, vertices, GLenum(GL_STATIC_DRAW))
+                    
+                    
+                    var vertexArray: GLuint = 0
+                    glGenVertexArraysAPPLE(1, &vertexArray)
+                    glBindVertexArrayAPPLE(vertexArray)
+                    
                     glEnableVertexAttribArray(0)
+                    glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
+                    glVertexAttribPointer(0, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, nil)
+//
                     glBindVertexArrayAPPLE(vertexArray)
                     glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)
                     
                     glDisableVertexAttribArray(0)
+                    
+                    glBindVertexArrayAPPLE(0)
+                    glBindBuffer(GLenum(GL_ARRAY_BUFFER), 0)
+                    glDeleteBuffers(1, &vertexBuffer)
+                    glDeleteVertexArraysAPPLE(1, &vertexArray)
+                    
                     
                     window1.swapBuffers()
                 }
