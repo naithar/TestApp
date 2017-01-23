@@ -53,7 +53,7 @@ func loadShaders() -> GLuint {
     
     let fragmentShaderCode = "" +
     //        "#version 330 core\n" +
-    "precision mediump float;                   \n" +
+//    "precision mediump float;                   \n" +
     "void main()                                \n" +
     "{                                          \n" +
     "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); \n" +
@@ -201,13 +201,13 @@ func draw() {
     
     gl.color(gl.Color(red: 1, green: 0.2, blue: 0.3, alpha: 1))
     
-    gl.draw(.quads) {
-        gl.vertex(gl.Vertex(x: -1, y: -1))
-        gl.vertex(gl.Vertex(x: 1, y: -1))
-        gl.color(gl.Color(red: 0.1, green: 0.2, blue: 1))
-        gl.vertex(gl.Vertex(x: 1, y: 0.5))
-        gl.vertex(gl.Vertex(x: 0.5, y: 0.5))
-    }
+//    gl.draw(.quads) {
+//        gl.vertex(gl.Vertex(x: -1, y: -1))
+//        gl.vertex(gl.Vertex(x: 1, y: -1))
+//        gl.color(gl.Color(red: 0.1, green: 0.2, blue: 1))
+//        gl.vertex(gl.Vertex(x: 1, y: 0.5))
+//        gl.vertex(gl.Vertex(x: 0.5, y: 0.5))
+//    }
 //    glBegin(GLenum(GL_FLOAT))
     
 //    print(glGetError())
@@ -465,6 +465,8 @@ main()
 //            }
 //            print(String(cString: glfwGetVersionString()))
 //            print(String(cString: glGetString( GLenum(GL_VERSION) )))
+            
+            gl.get(String.self, key: GLenum(GL_VERSION)) { print($0) }
             
 //            let vertices: [GLfloat] = [
 //                -1, -1, -1,
