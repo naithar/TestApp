@@ -1,0 +1,24 @@
+{
+  "autoPin": true,
+  "pins": [
+    {
+      "package": "GLFW",
+      "reason": null,
+      "repositoryURL": "https://github.com/swift-gl/SGLFW.git",
+      "version": "0.0.3"
+    },
+    {
+      "package": "SGLCore",
+      "reason": null,
+      "repositoryURL": "https://github.com/swift-gl/SGLCore.git",
+      "version": "0.0.1"
+    },
+    {
+      "package": "SOGL",
+      "reason": null,
+      "repositoryURL": "https://github.com/swift-gl/SOGL.git",
+      "version": "0.0.4"
+    }
+  ],
+  "version": 1
+}
